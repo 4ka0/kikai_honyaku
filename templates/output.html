@@ -2,28 +2,31 @@
 
 {% block content %}
 
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <td class="text-center"><strong>Source Text</strong></td>
-                <td>{{source}}</td>
-            </tr>
-            <tr>
-                <td class="text-center"><strong>Google Translate</strong></td>
-                <td>{{google_result}}</td>
-            </tr>
-            <tr>
-                <td class="text-center"><strong>Microsoft Translator</strong></td>
-                <td>{{microsoft_result}}</td>
-            </tr>
-            <tr>
-                <td class="text-center"><strong>Amazon Translate</strong></td>
-                <td>{{aws_result}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <p>Source Text:
+        <div class="alert alert-primary" role="alert">
+            {{source}}
+        </div>
+    </p>
 
-    <div class="text-center pt-2">
+    <p>Google Translate:
+        <div class="alert alert-info" role="alert">
+            {{google_result}}
+        </div>
+    </p>
+
+    <p>Microsoft Translator:
+        <div class="alert alert-warning" role="alert">
+            {{microsoft_result}}
+        </div>
+    </p>
+
+    <p>Amazon Translate:
+        <div class="alert alert-danger" role="alert">
+            {{aws_result}}
+        </div>
+    </p>
+
+    <div class="text-center pt-3 pb-5">
         <a href="{% url "home" %}" class="btn btn-outline-primary">New Translation</a>
     </div>
 
