@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+django = "~=3.1.1"
+boto3 = "*"
+googletrans = "*"
+requests = "*"
+django-crispy-forms = "*"
+environs = {extras = ["django"],version = "*"}
+
+[requires]
+python_version = "3.7"

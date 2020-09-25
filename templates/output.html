@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td class="text-center"><strong>Source Text</strong></td>
+                <td>{{source}}</td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>Google Translate</strong></td>
+                <td>{{google_result}}</td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>Microsoft Translator</strong></td>
+                <td>{{microsoft_result}}</td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>Amazon Translate</strong></td>
+                <td>{{aws_result}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center pt-2">
+        <a href="{% url "home" %}" class="btn btn-outline-primary">New Translation</a>
+    </div>
+
+    {{direction}}
+
+{% endblock content %}
+
+

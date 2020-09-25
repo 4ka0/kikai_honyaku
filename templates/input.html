@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form action="{% url "translate" %}">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+
+            <!-- Translation direction radio buttons -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="translation_direction" id="Ja>En" value="Ja>En" checked>
+                <label class="form-check-label" for="Ja>En">Japanese to English</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="translation_direction" id="En>Ja" value="En>Ja">
+                <label class="form-check-label" for="En>Ja">English to Japanese</label>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Text to be translated:</label>
+                <textarea class="form-control" name="source" id="exampleFormControlTextarea1" rows="4"></textarea>
+            </div>
+
+            <div class="text-center pt-2">
+                <input type="submit" value="Translate" class="btn btn-outline-primary"/>
+            </div>
+
+
+        </div>
+    </form>
+
+    <!--
+    <form action="{% url "translate" %}">
+        <input type="text" name="source_text" />
+        <br />
+        <br />
+        <input type="submit" value="Translate" />
+    </form>
+    -->
+
+{% endblock content %}
