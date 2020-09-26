@@ -1,11 +1,11 @@
 from django.test import SimpleTestCase
+from django.urls import reverse, resolve
+
+from .views import home, translate
 
 # URL tests
-# test that the input and output pages are actually rendered with a 200 code
-# being received
 
 class TestURLs(SimpleTestCase):
-
     def test_input_page_status_code(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -19,5 +19,14 @@ class TestURLs(SimpleTestCase):
         url = base_url + csrf_token + direction + source_text
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_input_url_resolves(self):
+        url = reverse("home")
+        self.assertEquals(resolve(url).func, home)
+
+    def test_output_url_resolves(self):
+        url = reverse("translate")
+        self.assertEquals(resolve(url).func, translate)
+
 
 # use paramaterize to test the smaller helper functions

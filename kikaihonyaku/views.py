@@ -10,6 +10,7 @@ from googletrans import Translator
 
 # To use environment variables
 from environs import Env
+
 env = Env()
 env.read_env()
 
@@ -40,10 +41,16 @@ def translate(request):
     results = [google_result, micro_result, aws_result]
     results = check_results(results)
 
-    return render(request, "output.html", {"source_text": source_text,
-                                           "google_result": results[0],
-                                           "microsoft_result": results[1],
-                                           "aws_result": results[2],},)
+    return render(
+        request,
+        "output.html",
+        {
+            "source_text": source_text,
+            "google_result": results[0],
+            "microsoft_result": results[1],
+            "aws_result": results[2],
+        },
+    )
 
 
 def check_results(results):
@@ -66,9 +73,7 @@ def google_translation(source, source_lang, target_lang):
     https://pypi.org/project/googletrans/
     """
     translator = Translator()
-    result = translator.translate(
-        source, src=source_lang, dest=target_lang
-    )
+    result = translator.translate(source, src=source_lang, dest=target_lang)
     return result.text
 
 
@@ -112,7 +117,9 @@ def aws_translation(source, source_lang, target_lang):
     per month for a period of one year.
     """
     translate = boto3.client(service_name="translate", use_ssl=True)
-    result = translate.translate_text(Text=source,
-                                      SourceLanguageCode=source_lang,
-                                      TargetLanguageCode=target_lang,)
+    result = translate.translate_text(
+        Text=source,
+        SourceLanguageCode=source_lang,
+        TargetLanguageCode=target_lang,
+    )
     return result.get("TranslatedText")
