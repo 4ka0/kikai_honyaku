@@ -23,24 +23,24 @@ def translate(request):
     Method to obtain translation results from Google, Microsoft, and AWS
     """
 
-    # Get source text (from textbox having name "source" in input.html)
-    source = request.GET["source"]
+    # Get source text (from textbox having name "source-text" in input.html)
+    source_text = request.GET["source-text"]
 
     # Get source and target languages
     # (from radio buttons having name "translation_direction" in input.html)
-    direction = request.GET["translation_direction"]
+    direction = request.GET["translation-direction"]
     source_lang, target_lang = translation_direction(direction)
 
     # Get translation results
-    google_result = google_translation(source, source_lang, target_lang)
-    micro_result = microsoft_translation(source, source_lang, target_lang)
-    aws_result = aws_translation(source, source_lang, target_lang)
+    google_result = google_translation(source_text, source_lang, target_lang)
+    micro_result = microsoft_translation(source_text, source_lang, target_lang)
+    aws_result = aws_translation(source_text, source_lang, target_lang)
 
     # If any result is empty, replace with something more readable
     results = [google_result, micro_result, aws_result]
     results = check_results(results)
 
-    return render(request, "output.html", {"source": source,
+    return render(request, "output.html", {"source_text": source_text,
                                            "google_result": results[0],
                                            "microsoft_result": results[1],
                                            "aws_result": results[2],},)
@@ -112,9 +112,7 @@ def aws_translation(source, source_lang, target_lang):
     per month for a period of one year.
     """
     translate = boto3.client(service_name="translate", use_ssl=True)
-    result = translate.translate_text(
-        Text=source,
-        SourceLanguageCode=source_lang,
-        TargetLanguageCode=target_lang,
-    )
+    result = translate.translate_text(Text=source,
+                                      SourceLanguageCode=source_lang,
+                                      TargetLanguageCode=target_lang,)
     return result.get("TranslatedText")
