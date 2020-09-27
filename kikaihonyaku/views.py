@@ -16,7 +16,7 @@ env.read_env()
 
 
 def home(request):
-    return render(request, "input.html")
+    return render(request, "home.html")
 
 
 def translate(request):
@@ -43,7 +43,7 @@ def translate(request):
 
     return render(
         request,
-        "output.html",
+        "translate.html",
         {
             "source_text": source_text,
             "google_result": results[0],
