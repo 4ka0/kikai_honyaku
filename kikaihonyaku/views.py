@@ -1,5 +1,8 @@
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
+from .forms import SourceTextInputForm
 
 import os
 import requests
@@ -10,47 +13,47 @@ from googletrans import Translator
 
 # To use environment variables
 from environs import Env
-
 env = Env()
 env.read_env()
 
 
-def home(request):
-    return render(request, "home.html")
-
-
 def translate(request):
-    """
-    Method to obtain translation results from Google, Microsoft, and AWS
-    """
 
-    # Get source text (from textbox having name "source-text" in input.html)
-    source_text = request.GET["source-text"]
+    # If the form has been populated, validate form, get the translation
+    # results and render using the translate.html template.
+    if request.method == 'POST':
+        form = SourceTextInputForm(request.POST)
 
-    # Get source and target languages
-    # (from radio buttons having name "translation_direction" in input.html)
-    direction = request.GET["translation-direction"]
-    source_lang, target_lang = translation_direction(direction)
+        if form.is_valid():
 
-    # Get translation results
-    google_result = google_translation(source_text, source_lang, target_lang)
-    micro_result = microsoft_translation(source_text, source_lang, target_lang)
-    aws_result = aws_translation(source_text, source_lang, target_lang)
+            # Get form data
+            direction = form.cleaned_data['direction']
+            source_text = form.cleaned_data['source_text']
 
-    # If any result is empty, replace with something more readable
-    results = [google_result, micro_result, aws_result]
-    results = check_results(results)
+            # Determine source and target languages
+            source_lang, target_lang = translation_direction(direction)
 
-    return render(
-        request,
-        "translate.html",
-        {
-            "source_text": source_text,
-            "google_result": results[0],
-            "microsoft_result": results[1],
-            "aws_result": results[2],
-        },
-    )
+            # Get translation results
+            google_result = google_translation(source_text, source_lang, target_lang)
+            micro_result = microsoft_translation(source_text, source_lang, target_lang)
+            aws_result = aws_translation(source_text, source_lang, target_lang)
+
+            # If any result is empty, replace with something more readable
+            results = [google_result, micro_result, aws_result]
+            results = check_results(results)
+
+            return render(request, 
+                          "translate.html",
+                          {"source_text": source_text,
+                           "google_result": results[0],
+                           "microsoft_result": results[1],
+                           "aws_result": results[2],},)
+
+    # If a blank form is to be displayed, render using the home.html template
+    else:
+        form = SourceTextInputForm()
+
+    return render(request, 'home.html', {'form': form})
 
 
 def check_results(results):

@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.home, name="home"),
     path("admin/", admin.site.urls),
+    path("", views.translate, name="home"),
     path("translate/", views.translate, name="translate"),
 ]
