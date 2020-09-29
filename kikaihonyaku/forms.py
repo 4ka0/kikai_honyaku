@@ -7,12 +7,10 @@ CHOICES=[('Ja>En', 'Japanese to English'),
 
 class SourceTextInputForm(forms.Form):
 
-    # Radio buttons for translation direction
+    # Radio buttons for the translation direction
     direction = forms.ChoiceField(widget=forms.RadioSelect,
                                   choices=CHOICES,
-                                  required=True)
+                                  initial='Ja>En')
 
-    # Text area for inputting source text to be translated
-    source_text = forms.CharField(widget=forms.Textarea,
-                                  required=True)
-
+    # Text area for inputting the source text to be translated
+    source_text = forms.CharField(widget=forms.Textarea, required=True)

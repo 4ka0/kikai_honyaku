@@ -1,20 +1,14 @@
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+import os, requests, uuid, json, boto3
 
-from .forms import SourceTextInputForm
-
-import os
-import requests
-import uuid
-import json
-import boto3
+# Third party imports
 from googletrans import Translator
-
-# To use environment variables
 from environs import Env
-env = Env()
-env.read_env()
+
+# Project import
+from .forms import SourceTextInputForm
 
 
 def translate(request):
@@ -22,32 +16,31 @@ def translate(request):
     # If the form has been populated, validate form, get the translation
     # results and render using the translate.html template.
     if request.method == 'POST':
+
         form = SourceTextInputForm(request.POST)
 
         if form.is_valid():
 
             # Get form data
             direction = form.cleaned_data['direction']
-            source_text = form.cleaned_data['source_text']
+            src_txt = form.cleaned_data['source_text']
 
             # Determine source and target languages
-            source_lang, target_lang = translation_direction(direction)
+            src_lang, tar_lang = translation_direction(direction)
 
             # Get translation results
-            google_result = google_translation(source_text, source_lang, target_lang)
-            micro_result = microsoft_translation(source_text, source_lang, target_lang)
-            aws_result = aws_translation(source_text, source_lang, target_lang)
+            google = google_trans(src_txt, src_lang, tar_lang)
+            microsoft = microsoft_trans(src_txt, src_lang, tar_lang)
+            aws = aws_trans(src_txt, src_lang, tar_lang)
 
             # If any result is empty, replace with something more readable
-            results = [google_result, micro_result, aws_result]
+            results = [google, microsoft, aws]
             results = check_results(results)
 
-            return render(request, 
-                          "translate.html",
-                          {"source_text": source_text,
-                           "google_result": results[0],
-                           "microsoft_result": results[1],
-                           "aws_result": results[2],},)
+            return render(request, "translate.html", {"src_txt": src_txt,
+                                                      "google": results[0],
+                                                      "microsoft": results[1],
+                                                      "aws": results[2],},)
 
     # If a blank form is to be displayed, render using the home.html template
     else:
@@ -70,7 +63,7 @@ def translation_direction(direction):
         return "en", "ja"
 
 
-def google_translation(source, source_lang, target_lang):
+def google_trans(source, source_lang, target_lang):
     """
     Uses the googletrans library to access Google Translate
     https://pypi.org/project/googletrans/
@@ -80,12 +73,16 @@ def google_translation(source, source_lang, target_lang):
     return result.text
 
 
-def microsoft_translation(source, source_lang, target_lang):
+def microsoft_trans(source, source_lang, target_lang):
     """
     Uses own azure subscription key to access Microsoft Translator, under which
     machine translation is available under a freemium model for 2M chars free
     per month for a period of one year.
     """
+
+    # To use environment variables
+    env = Env()
+    env.read_env()
 
     # Set up
     AZURE_SUBSCRIPTION_KEY = env.str("AZURE_SUBSCRIPTION_KEY")
@@ -113,7 +110,7 @@ def microsoft_translation(source, source_lang, target_lang):
     return result
 
 
-def aws_translation(source, source_lang, target_lang):
+def aws_trans(source, source_lang, target_lang):
     """
     Uses own AWS subscription key to access Amazon Translate, under which
     machine translation is available under a freemium model for 2M chars free
