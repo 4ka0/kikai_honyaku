@@ -3,27 +3,24 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 import os, requests, uuid, json, boto3
 
-# Third party imports
 from googletrans import Translator
 from environs import Env
 
-# Project import
 from .forms import SourceTextInputForm
 
 
 def translate(request):
 
-    # If the form has been populated, validate form, get the translation
-    # results and render using the translate.html template.
-    if request.method == 'POST':
+    # If the form has been populated
+    if request.method == "POST":
 
         form = SourceTextInputForm(request.POST)
 
         if form.is_valid():
 
             # Get form data
-            direction = form.cleaned_data['direction']
-            src_txt = form.cleaned_data['source_text']
+            direction = form.cleaned_data["direction"]
+            src_txt = form.cleaned_data["source_text"]
 
             # Determine source and target languages
             src_lang, tar_lang = translation_direction(direction)
@@ -37,16 +34,22 @@ def translate(request):
             results = [google, microsoft, aws]
             results = check_results(results)
 
-            return render(request, "translate.html", {"src_txt": src_txt,
-                                                      "google": results[0],
-                                                      "microsoft": results[1],
-                                                      "aws": results[2],},)
+            return render(
+                request,
+                "output.html",
+                {
+                    "src_txt": src_txt,
+                    "google": results[0],
+                    "microsoft": results[1],
+                    "aws": results[2],
+                },
+            )
 
-    # If a blank form is to be displayed, render using the home.html template
+    # If a blank form is to be displayed
     else:
         form = SourceTextInputForm()
 
-    return render(request, 'home.html', {'form': form})
+    return render(request, "input.html", {"form": form})
 
 
 def check_results(results):
@@ -80,7 +83,7 @@ def microsoft_trans(source, source_lang, target_lang):
     per month for a period of one year.
     """
 
-    # To use environment variables
+    # To use environment variables for the subscription key
     env = Env()
     env.read_env()
 
