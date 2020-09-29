@@ -6,9 +6,21 @@
 
     <div class="text-center">
         <form action="/output/" method="post">
+            
             {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-outline-primary">Translate</button>
+
+            <div class="form-group">
+                {{ form.direction|as_crispy_field }}
+            </div>
+
+            </br>
+
+            <div class="form-group">
+                {{ form.source_text|as_crispy_field }}
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary mt-3 mb-5">Translate</button>
+
         </form>
     </div>
 
