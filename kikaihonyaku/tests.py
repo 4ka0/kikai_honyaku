@@ -64,7 +64,7 @@ class TestForms(SimpleTestCase):
         form = SourceTextInputForm(data={})
         self.assertFalse(form.is_valid())
         # There should be one error for each item of missing data
-        self.assertEquals(len(form.errors), 2)
+        self.assertEqual(len(form.errors), 2)
 
 
 class TestTranslationEngines(SimpleTestCase):
@@ -110,8 +110,25 @@ class TestHelperMethods(SimpleTestCase):
 
     def test_translation_direction(self):
         src_lang, tar_lang = translation_direction(self.direction1)
-        self.assertEquals(src_lang, "ja")
-        self.assertEquals(tar_lang, "en")
+        self.assertEqual(src_lang, "ja")
+        self.assertEqual(tar_lang, "en")
         src_lang, tar_lang = translation_direction(self.direction2)
-        self.assertEquals(src_lang, "en")
-        self.assertEquals(tar_lang, "ja")
+        self.assertEqual(src_lang, "en")
+        self.assertEqual(tar_lang, "ja")
+
+
+class TestTranslateView(SimpleTestCase):
+    def test_translate_view_with_data:
+        response = self.client.post(reverse("input"), data={"direction": "Ja>En",
+                                                            "source_text": "ゼルダは任天堂のコンピュータゲームシリーズ。",})
+        """ ... """
+
+
+
+"""
+To do:
+
+Shouldn't access external API directly in test code.
+Should use mock instead, apparently.
+https://stackoverflow.com/questions/32433585/django-avoid-http-api-calls-while-testing-from-django-views
+"""
