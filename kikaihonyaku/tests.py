@@ -1,5 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+from unittest.mock import patch
 
 from .forms import SourceTextInputForm
 from .views import (
@@ -13,6 +14,7 @@ from .views import (
 
 
 class TestUrls(SimpleTestCase):
+
     def test_input_page_url(self):
         response = self.client.get(reverse("input"))
         self.assertEqual(response.status_code, 200)
@@ -25,6 +27,7 @@ class TestUrls(SimpleTestCase):
 
 
 class TestViews(SimpleTestCase):
+
     def test_input_page_correct_view_used(self):
         response = self.client.get(reverse("input"))
         self.assertEqual(response.resolver_match.func, translate)
@@ -36,21 +39,8 @@ class TestViews(SimpleTestCase):
         self.assertNotEqual(response.resolver_match.func, check_results)
 
 
-class TestTemplates(SimpleTestCase):
-    def test_input_page_template(self):
-        response = self.client.get(reverse("input"))
-        self.assertTemplateUsed(response, "input.html")
-        self.assertTemplateNotUsed(response, "output.html")
-
-    """
-    def test_output_page_template(self):
-        response = self.client.get(reverse("output"))
-        self.assertTemplateUsed(response, "output.html")
-        self.assertTemplateNotUsed(response, "input.html")
-    """
-
-
 class TestForms(SimpleTestCase):
+
     def test_input_form_valid_data(self):
         form = SourceTextInputForm(
             data={
@@ -67,29 +57,8 @@ class TestForms(SimpleTestCase):
         self.assertEqual(len(form.errors), 2)
 
 
-class TestTranslationEngines(SimpleTestCase):
-    def setUp(self):
-        self.source = "ゼルダは任天堂のコンピュータゲームシリーズ。"
-        self.src_lang = "ja"
-        self.tar_lang = "en"
-
-    def test_google_trans(self):
-        result = google_trans(self.source, self.src_lang, self.tar_lang)
-        result = result.strip()
-        self.assertTrue(result)
-
-    def test_microsoft_trans(self):
-        result = microsoft_trans(self.source, self.src_lang, self.tar_lang)
-        result = result.strip()
-        self.assertTrue(result)
-
-    def test_aws_trans(self):
-        result = aws_trans(self.source, self.src_lang, self.tar_lang)
-        result = result.strip()
-        self.assertTrue(result)
-
-
 class TestHelperMethods(SimpleTestCase):
+
     def setUp(self):
         self.source = "ゼルダは任天堂のコンピュータゲームシリーズ。"
         self.src_lang = "ja"
@@ -104,9 +73,6 @@ class TestHelperMethods(SimpleTestCase):
     def test_check_results(self):
         checked_results = check_results(self.results)
         self.assertTrue(len(checked_results) == 3)
-        self.assertTrue(checked_results[0], True)
-        self.assertTrue(checked_results[1], True)
-        self.assertTrue(checked_results[2], True)
 
     def test_translation_direction(self):
         src_lang, tar_lang = translation_direction(self.direction1)
@@ -118,10 +84,31 @@ class TestHelperMethods(SimpleTestCase):
 
 
 class TestTranslateView(SimpleTestCase):
-    def test_translate_view_with_data:
-        response = self.client.post(reverse("input"), data={"direction": "Ja>En",
-                                                            "source_text": "ゼルダは任天堂のコンピュータゲームシリーズ。",})
-        """ ... """
+
+    """
+    Need to patch/mock these method calls
+
+    google = google_trans(src_txt, src_lang, tar_lang)
+    microsoft = microsoft_trans(src_txt, src_lang, tar_lang)
+    aws = aws_trans(src_txt, src_lang, tar_lang)
+
+    @patch(google_trans)
+    @patch(microsoft_trans)
+    @patch(aws_trans)
+    """
+
+    def test_translate_view_with_data(self, mock_get):
+        response = self.client.post(
+            reverse("input"),
+            data={
+                "direction": "Ja>En",
+                "source_text": "ゼルダは任天堂のコンピュータゲームシリーズ。",
+            },
+        )
+
+
+
+
 
 
 
