@@ -82,21 +82,20 @@ class TestHelperMethods(SimpleTestCase):
         self.assertEqual(src_lang, "en")
         self.assertEqual(tar_lang, "ja")
 
+"""
+To do:
 
+Shouldn't access external API directly in test code.
+Should use mock instead.
+https://stackoverflow.com/questions/32433585/django-avoid-http-api-calls-while-testing-from-django-views
+"""
+
+"""
 class TestTranslateView(SimpleTestCase):
 
-    """
-    Need to patch/mock these method calls
-
-    google = google_trans(src_txt, src_lang, tar_lang)
-    microsoft = microsoft_trans(src_txt, src_lang, tar_lang)
-    aws = aws_trans(src_txt, src_lang, tar_lang)
-
-    @patch(google_trans)
-    @patch(microsoft_trans)
     @patch(aws_trans)
-    """
-
+    @patch(microsoft_trans)
+    @patch(google_trans)
     def test_translate_view_with_data(self, mock_get):
         response = self.client.post(
             reverse("input"),
@@ -105,17 +104,4 @@ class TestTranslateView(SimpleTestCase):
                 "source_text": "ゼルダは任天堂のコンピュータゲームシリーズ。",
             },
         )
-
-
-
-
-
-
-
-"""
-To do:
-
-Shouldn't access external API directly in test code.
-Should use mock instead, apparently.
-https://stackoverflow.com/questions/32433585/django-avoid-http-api-calls-while-testing-from-django-views
 """
