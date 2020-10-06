@@ -13,6 +13,8 @@ googletrans = "*"
 requests = "*"
 django-crispy-forms = "*"
 environs = {extras = ["django"],version = "*"}
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
