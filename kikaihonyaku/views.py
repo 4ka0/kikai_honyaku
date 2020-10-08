@@ -122,16 +122,12 @@ def aws_trans(source, source_lang, target_lang):
     """
 
     translate = boto3.client(
-        "translate",
+        service_name="translate",
         region_name="eu-west-2",
-        api_version=None,
         use_ssl=True,
-        verify=None,
-        endpoint_url=None,
         aws_access_key_id=env.str("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=env.str("AWS_SECRET_ACCESS_KEY"),
-        aws_session_token=None,
-        config=None)
+        aws_secret_access_key=env.str("AWS_SECRET_ACCESS_KEY")
+     )
 
     result = translate.translate_text(
         Text=source,
