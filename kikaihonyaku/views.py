@@ -1,8 +1,8 @@
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-import os, requests, uuid, json, boto3
+import os, uuid, json
 
+import requests
+import boto3
 from googletrans import Translator
 from environs import Env
 
@@ -119,10 +119,16 @@ def aws_trans(source, source_lang, target_lang):
     machine translation is available under a freemium model for 2M chars free
     per month for a period of one year.
     """
-    translate = boto3.client(service_name="translate", use_ssl=True)
+    translate = boto3.client(
+        service_name="translate",
+        use_ssl=True,
+        region_name='eu-west-2'
+    )
+
     result = translate.translate_text(
         Text=source,
         SourceLanguageCode=source_lang,
         TargetLanguageCode=target_lang,
     )
+
     return result.get("TranslatedText")
