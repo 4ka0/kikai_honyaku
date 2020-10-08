@@ -9,6 +9,11 @@ from environs import Env
 from .forms import SourceTextInputForm
 
 
+# Environment variables
+env = Env()
+env.read_env()
+
+
 def translate(request):
 
     # If the form has been populated
@@ -83,10 +88,6 @@ def microsoft_trans(source, source_lang, target_lang):
     per month for a period of one year.
     """
 
-    # To use environment variables for the subscription key
-    env = Env()
-    env.read_env()
-
     # Set up
     AZURE_SUBSCRIPTION_KEY = env.str("AZURE_SUBSCRIPTION_KEY")
     azure_endpoint = "https://api.cognitive.microsofttranslator.com"
@@ -119,11 +120,18 @@ def aws_trans(source, source_lang, target_lang):
     machine translation is available under a freemium model for 2M chars free
     per month for a period of one year.
     """
+
     translate = boto3.client(
-        service_name="translate",
+        "translate",
+        region_name="eu-west-2",
+        api_version=None,
         use_ssl=True,
-        region_name='eu-west-2'
-    )
+        verify=None,
+        endpoint_url=None,
+        aws_access_key_id=env.str("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=env.str("AWS_SECRET_ACCESS_KEY"),
+        aws_session_token=None,
+        config=None)
 
     result = translate.translate_text(
         Text=source,
