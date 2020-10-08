@@ -1,6 +1,5 @@
 import os, uuid, json
-from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render, reverse
 
 import boto3, requests
 from environs import Env
@@ -14,8 +13,8 @@ env = Env()
 env.read_env()
 
 
-def redirect_root(request):
-    return HttpResponseRedirect(reverse("input"))
+def redirect_root_url(request):
+    return redirect(reverse("input"), permanent=True)
 
 
 def translate(request):
