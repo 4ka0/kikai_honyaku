@@ -14,7 +14,6 @@ from .views import (
 
 
 class TestUrls(SimpleTestCase):
-
     def test_root_url_redirect(self):
         response = self.client.get("")
         self.assertEqual(response.status_code, 200)
@@ -32,7 +31,6 @@ class TestUrls(SimpleTestCase):
 
 
 class TestViews(SimpleTestCase):
-
     def test_input_page_correct_view_used(self):
         response = self.client.get(reverse("input"))
         self.assertEqual(response.resolver_match.func, translate)
@@ -45,7 +43,6 @@ class TestViews(SimpleTestCase):
 
 
 class TestForms(SimpleTestCase):
-
     def test_input_form_valid_data(self):
         form = SourceTextInputForm(
             data={
@@ -63,7 +60,6 @@ class TestForms(SimpleTestCase):
 
 
 class TestHelperMethods(SimpleTestCase):
-
     def setUp(self):
         self.source = "ゼルダは任天堂のコンピュータゲームシリーズ。"
         self.src_lang = "ja"
@@ -86,6 +82,7 @@ class TestHelperMethods(SimpleTestCase):
         src_lang, tar_lang = translation_direction(self.direction2)
         self.assertEqual(src_lang, "en")
         self.assertEqual(tar_lang, "ja")
+
 
 """
 To do:

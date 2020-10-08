@@ -129,8 +129,8 @@ def aws_trans(source, source_lang, target_lang):
         region_name="eu-west-2",
         use_ssl=True,
         aws_access_key_id=env.str("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=env.str("AWS_SECRET_ACCESS_KEY")
-     )
+        aws_secret_access_key=env.str("AWS_SECRET_ACCESS_KEY"),
+    )
 
     result = translate.translate_text(
         Text=source,
