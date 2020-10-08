@@ -15,6 +15,12 @@ from .views import (
 
 class TestUrls(SimpleTestCase):
 
+    def test_root_url_redirect(self):
+        response = self.client.get("")
+        self.assertEqual(response.status_code, 302)
+        self.assertNotEqual(response.status_code, 200)
+        self.assertNotEqual(response.status_code, 404)
+
     def test_input_page_url(self):
         response = self.client.get(reverse("input"))
         self.assertEqual(response.status_code, 200)

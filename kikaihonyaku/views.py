@@ -1,17 +1,21 @@
-from django.shortcuts import render
 import os, uuid, json
+from django.shortcuts import render, reverse
+from django.http import HttpResponseRedirect
 
-import requests
-import boto3
-from googletrans import Translator
+import boto3, requests
 from environs import Env
+from googletrans import Translator
 
 from .forms import SourceTextInputForm
 
 
-# Environment variables
+# For environment variables
 env = Env()
 env.read_env()
+
+
+def redirect_root(request):
+    return HttpResponseRedirect(reverse("input"))
 
 
 def translate(request):
@@ -60,7 +64,7 @@ def translate(request):
 def check_results(results):
     for elem in results:
         if not elem.strip():
-            elem = "Not available."
+            elem = "(Not available)"
     return results
 
 

@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", views.translate, name="root_redirect"),
     path("input/", views.translate, name="input"),
     path("output/", views.translate, name="output"),
 ]
