@@ -1,6 +1,6 @@
 # Kikai Honyaku
 
-A webapp that displays machine translation results for comparison purposes.
+A simple webapp that displays machine translation results for comparison purposes.
 
 Machine translations are obtained by calling the following APIs:
 * Google Translate
