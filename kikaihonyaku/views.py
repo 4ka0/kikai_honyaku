@@ -14,6 +14,15 @@ env.read_env()
 
 
 def translate(request):
+    """
+    Method to:
+    (1) in the case of a POST request, receive form data including the user
+        input source text to be translated, have the form data translated by
+        making calls to the machine translation APIs, and then displaying the
+        results, and
+    (2) in the case of a GET request, display a blank form to receive user
+        input.
+    """
 
     # If the form has been populated
     if request.method == "POST":
@@ -57,6 +66,9 @@ def translate(request):
 
 
 def check_results(results):
+    """
+    Method to check for black responses to the API calls.
+    """
     for elem in results:
         if not elem.strip():
             elem = "(Not available)"
@@ -64,6 +76,10 @@ def check_results(results):
 
 
 def translation_direction(direction):
+    """
+    Method to get the source and target languages from the translation
+    direction.
+    """
     if direction == "Ja>En":
         return "ja", "en"
     else:
@@ -72,6 +88,7 @@ def translation_direction(direction):
 
 def google_trans(source, source_lang, target_lang):
     """
+    Method to get a translation from Google Translate.
     Uses the googletrans library to access Google Translate
     https://pypi.org/project/googletrans/
     """
@@ -82,7 +99,8 @@ def google_trans(source, source_lang, target_lang):
 
 def microsoft_trans(source, source_lang, target_lang):
     """
-    Uses own azure subscription key to access Microsoft Translator, under which
+    Method to get a translation from Microsoft Translator.
+    Uses own Azure subscription key to access Microsoft Translator, under which
     machine translation is available under a freemium model for 2M chars free
     per month for a period of one year.
     """
@@ -115,6 +133,7 @@ def microsoft_trans(source, source_lang, target_lang):
 
 def aws_trans(source, source_lang, target_lang):
     """
+    Method to get a translation from Amazon Translate.
     Uses own AWS subscription key to access Amazon Translate, under which
     machine translation is available under a freemium model for 2M chars free
     per month for a period of one year.
