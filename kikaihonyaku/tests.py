@@ -47,13 +47,13 @@ class TestViews(SimpleTestCase):
         i.e. that the form is displayed with all the correct elements.
         """
         response = self.client.get(reverse("input"))
-        self.assertContains(response, 'Machine Translation Comparison')
-        self.assertContains(response, '<form', 1)
+        self.assertContains(response, "Machine Translation Comparison")
+        self.assertContains(response, "<form", 1)
         self.assertContains(response, 'type="radio"', 2)
-        self.assertContains(response, '<textarea', 1)
-        self.assertContains(response, 'csrfmiddlewaretoken', 1)
+        self.assertContains(response, "<textarea", 1)
+        self.assertContains(response, "csrfmiddlewaretoken", 1)
         self.assertContains(response, '<button type="submit"', 1)
-        self.assertContains(response, 'Translate</button>', 1)
+        self.assertContains(response, "Translate</button>", 1)
 
     def test_translate_view_POST(self):
         """
@@ -65,17 +65,17 @@ class TestViews(SimpleTestCase):
             reverse("input"),
             data={
                 "direction": "Ja>En",
-                "source_text": "ゼルダの伝説シリーズは任天堂のゲームシリーズ。"
-            }
+                "source_text": "ゼルダの伝説シリーズは任天堂のゲームシリーズ。",
+            },
         )
-        self.assertContains(response, 'Machine Translation Comparison')
-        self.assertContains(response, 'alert alert-primary', 1)
-        self.assertContains(response, 'alert alert-info', 1)
-        self.assertContains(response, 'alert alert-warning', 1)
-        self.assertContains(response, 'alert alert-danger', 1)
-        self.assertContains(response, 'Zelda', 3)
-        self.assertContains(response, 'Nintendo', 3)
-        self.assertContains(response, 'game', 3)
+        self.assertContains(response, "Machine Translation Comparison")
+        self.assertContains(response, "alert alert-primary", 1)
+        self.assertContains(response, "alert alert-info", 1)
+        self.assertContains(response, "alert alert-warning", 1)
+        self.assertContains(response, "alert alert-danger", 1)
+        self.assertContains(response, "Zelda", 3)
+        self.assertContains(response, "Nintendo", 3)
+        self.assertContains(response, "game", 3)
         self.assertContains(response, 'outline-primary">New Translation', 1)
 
 
