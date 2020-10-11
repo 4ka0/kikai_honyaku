@@ -1,8 +1,10 @@
 # Kikai Honyaku
 
-A webapp that displays machine translation results obtained from:
+A webapp that displays machine translation results for comparison purposes.
+
+Machine translations are obtained by calling the following APIs:
 * Google Translate
-* Microsoft Translator, and
+* Microsoft Translator
 * Amazon Translate
 
 ### Built using:
