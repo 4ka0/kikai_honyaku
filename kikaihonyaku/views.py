@@ -13,10 +13,6 @@ env = Env()
 env.read_env()
 
 
-def redirect_root_url(request):
-    return redirect(reverse("input"), permanent=True)
-
-
 def translate(request):
 
     # If the form has been populated

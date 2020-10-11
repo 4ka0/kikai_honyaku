@@ -15,6 +15,7 @@ django-crispy-forms = "*"
 environs = {extras = ["django"],version = "*"}
 psycopg2-binary = "*"
 gunicorn = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.7"

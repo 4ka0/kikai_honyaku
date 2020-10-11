@@ -14,7 +14,7 @@ from .views import (
 
 
 class TestUrls(SimpleTestCase):
-    def test_root_url_redirect(self):
+    def test_root_url(self):
         response = self.client.get("")
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.status_code, 404)
@@ -40,6 +40,43 @@ class TestViews(SimpleTestCase):
         response = self.client.get(reverse("output"))
         self.assertEqual(response.resolver_match.func, translate)
         self.assertNotEqual(response.resolver_match.func, check_results)
+
+    def test_translate_view_GET(self):
+        """
+        Test page content in the case of a GET request,
+        i.e. that the form is displayed with all the correct elements.
+        """
+        response = self.client.get(reverse("input"))
+        self.assertContains(response, 'Machine Translation Comparison')
+        self.assertContains(response, '<form', 1)
+        self.assertContains(response, 'type="radio"', 2)
+        self.assertContains(response, '<textarea', 1)
+        self.assertContains(response, 'csrfmiddlewaretoken', 1)
+        self.assertContains(response, '<button type="submit"', 1)
+        self.assertContains(response, 'Translate</button>', 1)
+
+    def test_translate_view_POST(self):
+        """
+        Test page content in the case of a POST request,
+        i.e. that the correct html page elements are present and that the form
+        data has been translated.
+        """
+        response = self.client.post(
+            reverse("input"),
+            data={
+                "direction": "Ja>En",
+                "source_text": "ゼルダの伝説シリーズは任天堂のゲームシリーズ。"
+            }
+        )
+        self.assertContains(response, 'Machine Translation Comparison')
+        self.assertContains(response, 'alert alert-primary', 1)
+        self.assertContains(response, 'alert alert-info', 1)
+        self.assertContains(response, 'alert alert-warning', 1)
+        self.assertContains(response, 'alert alert-danger', 1)
+        self.assertContains(response, 'Zelda', 3)
+        self.assertContains(response, 'Nintendo', 3)
+        self.assertContains(response, 'game', 3)
+        self.assertContains(response, 'outline-primary">New Translation', 1)
 
 
 class TestForms(SimpleTestCase):
@@ -82,28 +119,3 @@ class TestHelperMethods(SimpleTestCase):
         src_lang, tar_lang = translation_direction(self.direction2)
         self.assertEqual(src_lang, "en")
         self.assertEqual(tar_lang, "ja")
-
-
-"""
-To do:
-
-Shouldn't access external API directly in test code.
-Should use mock instead.
-https://stackoverflow.com/questions/32433585/django-avoid-http-api-calls-while-testing-from-django-views
-"""
-
-"""
-class TestTranslateView(SimpleTestCase):
-
-    @patch(aws_trans)
-    @patch(microsoft_trans)
-    @patch(google_trans)
-    def test_translate_view_with_data(self, mock_get):
-        response = self.client.post(
-            reverse("input"),
-            data={
-                "direction": "Ja>En",
-                "source_text": "ゼルダは任天堂のコンピュータゲームシリーズ。",
-            },
-        )
-"""
