@@ -91,7 +91,6 @@ def google_trans(source, source_lang, target_lang):
     """
     Method to get a translation from Google Translate.
     """
-
     translate_client = translate_v2.Client()
 
     if isinstance(source, six.binary_type):
