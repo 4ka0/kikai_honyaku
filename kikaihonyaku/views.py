@@ -1,9 +1,10 @@
 import os, uuid, json
 from django.shortcuts import redirect, render, reverse
 
+import six
 import boto3, requests
 from environs import Env
-from googletrans import Translator
+from google.cloud import translate_v2
 
 from .forms import SourceTextInputForm
 
@@ -89,12 +90,20 @@ def translation_direction(direction):
 def google_trans(source, source_lang, target_lang):
     """
     Method to get a translation from Google Translate.
-    Uses the googletrans library to access Google Translate
-    https://pypi.org/project/googletrans/
     """
-    translator = Translator()
-    result = translator.translate(source, src=source_lang, dest=target_lang)
-    return result.text
+
+    translate_client = translate_v2.Client()
+
+    if isinstance(source, six.binary_type):
+        text = text.decode("utf-8")
+
+    output = translate_client.translate(
+        source,
+        source_language=source_lang,
+        target_language=target_lang
+    )
+
+    return output['translatedText']
 
 
 def microsoft_trans(source, source_lang, target_lang):

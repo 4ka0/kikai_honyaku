@@ -5,3 +5,4 @@ db.sqlite3
 .vscode/
 .coverage
 htmlcov/
+google-credentials.json

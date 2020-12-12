@@ -16,6 +16,7 @@ environs = {extras = ["django"],version = "*"}
 psycopg2-binary = "*"
 gunicorn = "*"
 coverage = "*"
+google-cloud-translate = "*"
 
 [requires]
 python_version = "3.7"
