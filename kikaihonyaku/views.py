@@ -68,7 +68,7 @@ def translate(request):
 
 def check_results(results):
     """
-    Method to check for black responses to the API calls.
+    Method to check for blank responses to the API calls.
     """
     for elem in results:
         if not elem.strip():
