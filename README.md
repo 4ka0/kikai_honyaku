@@ -1,6 +1,6 @@
 # Kikai Honyaku
 
-A simple webapp that displays machine translation results for comparison purposes.
+A simple webapp that displays machine translation results for comparison purposes. A self-study project for learning how to call third-party APIs.
 
 Machine translations are obtained by calling the following APIs:
 * Google Translate
