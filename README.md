@@ -9,7 +9,7 @@ Machine translations are obtained by calling the following APIs:
 * Microsoft Translator
 * Amazon Translate
 
-[Live demo](https://kikaihonyaku.herokuapp.com) (deployed on Heroku, may take a little while to load).
+[Live demo](https://kikaihonyaku.herokuapp.com)
 
 ### Built using:
 
