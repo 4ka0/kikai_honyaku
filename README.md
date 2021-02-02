@@ -28,8 +28,6 @@ Machine translations are obtained by calling the following APIs:
 
 ### Screenshots:
 
-List view:
 ![alt text](readme_screenshot_1.png "Article list screenshot")</br>
 
-Detail view:
 ![alt text](readme_screenshot_2.png "Article detail screenshot")
